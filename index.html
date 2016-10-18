@@ -91,7 +91,7 @@
                                         <div class="add-del">
                                         <div style="width:30px;height:30px;line-height:30px;font-size:12px;text-align:center;float:left;box-sizing:border-box;border:1px solid #ccc" ng-click="bags.num=bags.num+1">+</div>
                                             <div style="width:30px;height:30px;line-height:30px;font-size:12px;text-align:center;float:left;box-sizing:border-box;border-top:1px solid #ccc;border-bottom:1px solid #ccc">{{bags.num}}</div>
-                                        <div style="width:30px;height:30px;line-height:30px;font-size:12px;text-align:center;float:left;box-sizing:border-box;border:1px solid #ccc" ng-click="delnum($index)">-</div>
+                                        <div style="width:30px;height:30px;line-height:30px;font-size:12px;text-align:center;float:left;box-sizing:border-box;border:1px solid #ccc" ng-click="delnum(bags.id)">-</div>
                                         </div>
                                     </div>
                                     <div class="col-xs-2">{{bags.num * bags.price}}</div>
@@ -127,14 +127,14 @@
     var shoping=angular.module('shopping',[]);
     shoping.controller('mainCtrl',['$scope',function($scope){
         $scope.goods=[
-            {id:1001,image:'1.jpg',name:'卡通汽车坐垫',price:358,},
-            {id:1002,image:"2.jpg",name:'美式复古实木照片墙',price:228,},
-            {id:1003,image:"3.jpg",name:'发光旋转木马水晶球',price:128,},
-            {id:1004,image:'4.jpg',name:'百洛安2016秋冬新款纯色毛衣大外套',price:229,},
-            {id:1005,image:"5.jpg",name:'赛德斯游戏键盘鼠标套装',price:109,},
-            {id:1006,image:"6.jpg",name:'小熊养生壶',price:139,},
-            {id:1007,image:"7.jpg",name:'苹果不锈钢表带',price:145,},
-            {id:1008,image:"8.jpg",name:'佳奥泰国天然乳胶枕',price:199,},
+            {id:1001,image:'1.jpg',name:'汽车垫',price:358,},
+            {id:1002,image:"2.jpg",name:'照片墙',price:228,},
+            {id:1003,image:"3.jpg",name:'水晶球',price:128,},
+            {id:1004,image:'4.jpg',name:'毛衣',price:229,},
+            {id:1005,image:"5.jpg",name:'鼠标',price:109,},
+            {id:1006,image:"6.jpg",name:'养生壶',price:139,},
+            {id:1007,image:"7.jpg",name:'表带',price:145,},
+            {id:1008,image:"8.jpg",name:'乳胶枕',price:199,},
         ];
         $scope.bag=[];
         $scope.lists=[];
@@ -188,7 +188,7 @@
 //                }
 
                  var item=$scope.lists.find(function(v,i){
-                     return v.id !==id;
+                     return v.id ===id;
                  })
                  if(item.num>0){
                      item.num -=1;
