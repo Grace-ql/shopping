@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en" ng-app="shopping">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+    <!--<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>-->
+
+    <!--<script src="//cdn.bootcss.com/angular.js/1.5.8/angular.js"></script>-->
+    <!--<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.0/css/bootstrap.min.css">-->
+    <script src="jquery.js"></script>
+    <script src="angular.js"></script>
+    <link rel="stylesheet" href="bootstrap.min.css"><link rel="stylesheet" href="bootstrap.min.css">
+</head>
+<body ng-controller="mainCtrl" ng-click="aa=false">
+<style>
+    .header{
+        margin-bottom:20px;
+    }
+    .header .navbar{
+        margin-bottom:0;
+    }
+    .header .dropdown-menu{
+        width:500px;
+        /*display:block !important;*/
+    }
+    .dropdown-menu.show{
+       display:block !important;
+    }
+    .dropdown-menu #img-size img{
+        width:30px;
+        height:30px;
+    }
+    .dropdown{
+        position:relative;
+    }
+    .dropdown .box{
+        display:inline-block;
+        width:20px !important;
+        height:20px !important;
+        background:red;
+        position:absolute;
+        top:5px;
+        left:70px;
+        border-radius:50%;
+        color:#fff;
+        font-size:14px;
+        line-height:20px;
+        text-align:center;
+
+    }
+    .add-del{
+        width:90px;
+        height:30px;
+        margin-left:-15px;
+    }
+</style>
+<div class="header" style="width:100%;height:52px;background:#222;" style=":0;">
+    <div class="container">
+        <nav class="navbar navbar-inverse" role="navigation">
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="#">Brand</a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-right" ng-click="prevent($event)">
+                        <li class="dropdown" ng-init="aa=false">
+                            <a href="#" ng-click="aa=!aa ; prevent($event)" class="dropdown-toggle" data-toggle="dropdown">购物车<span class="box">{{lists.length}}</span><span class="caret"></span></a>
+                            <ul class="dropdown-menu" role="menu" ng-class="{show:aa}">
+                                <li style="margin-bottom:20px;height:40px;border-bottom:1px solid #ccc;text-align:center;line-height:30px;">
+                                    <div class="col-xs-2" style="max-width:100%;max-height:100%">图片</div>
+                                    <div class="col-xs-2">名称</div>
+                                    <div class="col-xs-2">价格</div>
+                                    <div class="col-xs-2">数量</div>
+                                    <div class="col-xs-2">总价</div>
+                                </li>
+                                <li ng-repeat="bags in lists track by $index" style="margin-bottom:20px;height:40px;border-bottom:1px solid #ccc;text-align:center;line-height:30px;">
+                                    <div class="col-xs-2" id="img-size" style="max-width:100%;max-height:100%"><img ng-src="{{bags.image}}" alt=""></div>
+                                    <div class="col-xs-2">{{bags.name}}</div>
+                                    <div class="col-xs-2">{{bags.price}}</div>
+                                    <div class="col-xs-2">
+                                        <div class="add-del">
+                                        <div style="width:30px;height:30px;line-height:30px;font-size:12px;text-align:center;float:left;box-sizing:border-box;border:1px solid #ccc" ng-click="bags.num=bags.num+1">+</div>
+                                            <div style="width:30px;height:30px;line-height:30px;font-size:12px;text-align:center;float:left;box-sizing:border-box;border-top:1px solid #ccc;border-bottom:1px solid #ccc">{{bags.num}}</div>
+                                        <div style="width:30px;height:30px;line-height:30px;font-size:12px;text-align:center;float:left;box-sizing:border-box;border:1px solid #ccc" ng-click="delnum($index)">-</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-2">{{bags.num * bags.price}}</div>
+                                    <div class="col-xs-2"><button class="btn btn-danger" ng-click="delete(bags.id)">删除</button></div>
+                                </li>
+                                <li class="divider"></li>
+                                <li ng-show="lists.length===0">亲，你的购物车是空的请去选！</li>
+                                <li ng-show="lists.length!==0">您一共有{{lists.length}}商品，总价为{{count()}}</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav>
+        <div class="row" style="margin-top:20px;">
+            <div class="col-sm-6 col-md-3" ng-repeat="good in goods">
+                <div class="thumbnail">
+                    <img ng-src="{{good.image}}" alt="..." style="width:280px;height:220px;">
+                    <div class="caption">
+                        <h5>{{good.name}}</h5>
+                        <p>{{good.price}}</p>
+                        <p>
+                            <a href="#" class="btn btn-primary" role="button" ng-click="add(good.id,$event)">加入购物车</a>
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var shoping=angular.module('shopping',[]);
+    shoping.controller('mainCtrl',['$scope',function($scope){
+        $scope.goods=[
+            {id:1001,image:'1.jpg',name:'卡通汽车坐垫',price:358,},
+            {id:1002,image:"2.jpg",name:'美式复古实木照片墙',price:228,},
+            {id:1003,image:"3.jpg",name:'发光旋转木马水晶球',price:128,},
+            {id:1004,image:'4.jpg',name:'百洛安2016秋冬新款纯色毛衣大外套',price:229,},
+            {id:1005,image:"5.jpg",name:'赛德斯游戏键盘鼠标套装',price:109,},
+            {id:1006,image:"6.jpg",name:'小熊养生壶',price:139,},
+            {id:1007,image:"7.jpg",name:'苹果不锈钢表带',price:145,},
+            {id:1008,image:"8.jpg",name:'佳奥泰国天然乳胶枕',price:199,},
+        ];
+        $scope.bag=[];
+        $scope.lists=[];
+        $scope.add=function(id,e){
+            $scope.aa=false;
+            e.preventDefault();
+            e.stopPropagation();
+//            var item=$scope.goods[index];
+//            item.num=1;
+//        //   console.log(item)
+//            $scope.bag.push(item);
+//        //   console.log($scope.goods)
+                var tem=$scope.lists.find(function (v,i) {
+                            return v.id===id;
+                        })
+                if(tem){
+                    tem.num+=1;
+                }else{
+                    var item=$scope.goods.find(function(v,i){
+                        return v.id===id;
+                    })
+                    item.num=1;
+                    $scope.lists.push(item);
+                }
+        }
+        $scope.delete=function(id){
+//            $scope.bag.splice(index,1);
+            $scope.lists=$scope.lists.filter(function(v,i){
+                return v.id !== id;
+            })
+        }
+        $scope.count=function(){
+//            var t=0;
+//            $scope.bag.forEach(d=function(v){
+//                t+=v.price*v.num;
+//            })
+//            return t;
+            var t=0;
+            $scope.lists.forEach(function(v){
+                t +=v.price*v.num;
+            })
+            return t;
+        }
+//        $scope.addnum=function(index) {
+//            $scope.bag[index].num++;
+//        }
+        $scope.delnum=function(id){
+
+//                if( $scope.bag[index].num!==0){
+//                    $scope.bag[index].num--;
+//                }
+
+                 var item=$scope.lists.find(function(v,i){
+                     return v.id !==id;
+                 })
+                 if(item.num>0){
+                     item.num -=1;
+                 }
+        }
+
+        $scope.prevent=function(e){
+            e.stopPropagation()
+        }
+    }])
+</script>
+
+
+
+</body>
+</html>
